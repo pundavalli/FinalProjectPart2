@@ -66,7 +66,9 @@ public class Advisee extends People {
     public void Display() {
         System.out.printf("%s\n" + "%s\n" + "%s\n" + "%s\n" + "Major: %s\n", getName(), getID(), getEmail(), getAddress(), major);
     }
+
+    @Override
+    public String toString() {
+        return getID() + ": " + getName();
+    }
 }
-
-
-//Hi
