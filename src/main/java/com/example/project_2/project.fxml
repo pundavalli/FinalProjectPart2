@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project_2.StudentController">
+    <children>
+        <ListView fx:id="listView" layoutX="58.0" layoutY="235.0" prefHeight="148.0" prefWidth="200.0" />
+        <GridPane layoutX="58.0" layoutY="5.0" prefHeight="148.0" prefWidth="221.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.0" minWidth="10.0" prefWidth="75.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="110.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="46.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Name" />
+                <Label text="Email" GridPane.rowIndex="2" />
+                <Label text="Phone Number" GridPane.rowIndex="3" />
+                <TextField fx:id="txt_name" prefHeight="26.0" prefWidth="146.0" GridPane.columnIndex="1" />
+                <TextField fx:id="txt_email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="txt_phoneNum" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="Academic ID" GridPane.rowIndex="1" />
+                <TextField fx:id="txt_acadID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="Address" GridPane.rowIndex="4" />
+                <TextField fx:id="txt_address" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            </children>
+        </GridPane>
+        <Button fx:id="editBtn" layoutX="81.0" layoutY="200.0" mnemonicParsing="false" onAction="#editBtnPress" prefHeight="26.0" prefWidth="155.0" text="Update Selected Student" />
+        <Button fx:id="addBtn" layoutX="81.0" layoutY="164.0" mnemonicParsing="false" onAction="#addBtnPress" prefHeight="26.0" prefWidth="155.0" text="Add New Student" />
+        <ListView fx:id="courseList" layoutX="355.0" layoutY="183.0" prefHeight="200.0" prefWidth="200.0" />
+        <GridPane layoutX="364.0" layoutY="14.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Course:" />
+                <Label text="Course Credits:" GridPane.rowIndex="1" />
+                <Label text="Course Cost:" GridPane.rowIndex="2" />
+                <TextField fx:id="text_courseName" GridPane.columnIndex="1" />
+                <TextField fx:id="text_courseCredits" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="text_course_Cost" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            </children>
+        </GridPane>
+        <Button fx:id="add_CourseBtn" layoutX="394.0" layoutY="113.0" mnemonicParsing="false" onAction="#addCourse_Press" text="Add Course to Student" />
+    </children>
+</AnchorPane>
