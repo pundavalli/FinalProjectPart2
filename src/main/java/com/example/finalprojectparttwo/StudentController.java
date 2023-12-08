@@ -14,7 +14,7 @@ public class StudentController {
 
     TextField[] textFields;
     private ObservableList<Advisee> adviseesList = FXCollections.observableArrayList();
-    private String name, acadID, email, address;
+    private String name, acadID, email;
     private long phoneNum;
     private ObservableList<Course> courses = FXCollections.observableArrayList();
     private String courseName;
@@ -65,7 +65,6 @@ public class StudentController {
         acadID = txt_acadID.getText();
         email = txt_email.getText();
         phoneNum = Long.parseLong(txt_phoneNum.getText());
-        address = txt_address.getText();
     }
 
     private void clearTextFields() {
@@ -113,7 +112,7 @@ public class StudentController {
 
     void add_CoursePress(ActionEvent event) {
         fillData();
-        Course to_Edit=new Course(courseName,courseCredits,course_Cost);
+        Course to_Edit = new Course(courseName, courseCredits, course_Cost);
         to_Edit.setCourseName(courseName);
         to_Edit.setNumOfCredits(courseCredits);
         to_Edit.setPrice(course_Cost);
@@ -124,7 +123,7 @@ public class StudentController {
 
     @FXML
     void initialize() {
-        textFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address,text_courseName,text_courseCredits,text_course_Cost};
+        textFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address, text_courseName, text_courseCredits, text_course_Cost};
 
         listView.setItems(adviseesList);
         courseList.setItems(courses);
@@ -137,7 +136,8 @@ public class StudentController {
                 txt_phoneNum.setText("" + newA.getPhoneNum());
                 txt_address.setText(newA.getAddress().toString());
             }
-            public void modified_Course(ObservableValue<? extends Course> observableValue, Course oldC, Course newC){
+
+            public void modified_Course(ObservableValue<? extends Course> observableValue, Course oldC, Course newC) {
                 text_courseName.setText(newC.getCourseName());
                 text_courseCredits.setText(String.valueOf(newC.getNumOfCredits()));
                 text_course_Cost.setText(String.valueOf(newC.getPrice()));
