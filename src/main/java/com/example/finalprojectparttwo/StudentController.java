@@ -19,13 +19,16 @@ public class StudentController {
     private ObservableList<Course> courses = FXCollections.observableArrayList();
     private String courseName;
     private int courseCredits;
-    private double course_Cost;
+    private float course_Cost;
 
     @FXML
     private Button addBtn;
 
     @FXML
     private Button editBtn;
+
+    @FXML
+    private Button deleteBtn;
 
     @FXML
     private ListView<Advisee> listView;
@@ -44,12 +47,16 @@ public class StudentController {
 
     @FXML
     private TextField txt_phoneNum;
+
     @FXML
     private ListView<Course> courseList;
+
     @FXML
     private TextField textC_name;
+
     @FXML
     private TextField textcredits_Course;
+
     @FXML
     private TextField text_Cost;
 
@@ -73,8 +80,8 @@ public class StudentController {
 
         Advisee addedAdvisee = new Advisee(name, acadID);
         addedAdvisee.setEmail(email);
-        //addedAdvisee.setAddress(address);
         addedAdvisee.setPhoneNum(phoneNum);
+        addedAdvisee.setAddress(new Address(25, "Yearsley Mill Rd", "Media", "PA", 19063));
         adviseesList.add(addedAdvisee);
 
         clearTextFields();
@@ -97,13 +104,20 @@ public class StudentController {
 
         clearTextFields();
     }
-    void add_CoursePress(ActionEvent event){
+
+    @FXML
+    void deleteBtnPress(ActionEvent event) {
+        adviseesList.remove(listView.getSelectionModel().getSelectedIndex());
+        clearTextFields();
+    }
+
+    void add_CoursePress(ActionEvent event) {
         fillData();
-        Course to_Edit=courseList.getSelectionModel().getSelectedItem();
-        if(!courseName.isEmpty()){
+        Course to_Edit = courseList.getSelectionModel().getSelectedItem();
+        if (!courseName.isEmpty()) {
             to_Edit.setCourseName(courseName); //Set the course name,when not Empty
         }
-        if(courseCredits>0){
+        if (courseCredits > 0) {
             to_Edit.setNumOfCredits(courseCredits);
         }
         to_Edit.setPrice(course_Cost);
@@ -111,9 +125,10 @@ public class StudentController {
 
         clearTextFields();
     }
+
     @FXML
     void initialize() {
-        textFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address,textC_name,textcredits_Course,text_Cost};
+        textFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address, textC_name, textcredits_Course, text_Cost};
 
         listView.setItems(adviseesList);
         courseList.setItems(courses);
@@ -126,7 +141,8 @@ public class StudentController {
                 txt_phoneNum.setText("" + newA.getPhoneNum());
                 txt_address.setText(newA.getAddress().toString());
             }
-            public void modified_Course(ObservableValue<? extends Course> observableValue, Course oldC, Course newC){
+
+            public void modified_Course(ObservableValue<? extends Course> observableValue, Course oldC, Course newC) {
                 textC_name.setText(newC.getCourseName());
                 textcredits_Course.setText(String.valueOf(newC.getNumOfCredits()));
                 text_Cost.setText(String.valueOf(newC.getPrice()));
