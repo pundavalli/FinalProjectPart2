@@ -16,6 +16,10 @@ public class StudentController {
     private ObservableList<Advisee> adviseesList = FXCollections.observableArrayList();
     private String name, acadID, email, address;
     private long phoneNum;
+    private ObservableList<Course> courses = FXCollections.observableArrayList();
+    private String courseName;
+    private int courseCredits;
+    private double course_Cost;
 
     @FXML
     private Button addBtn;
@@ -40,6 +44,14 @@ public class StudentController {
 
     @FXML
     private TextField txt_phoneNum;
+    @FXML
+    private ListView<Course> courseList;
+    @FXML
+    private TextField textC_name;
+    @FXML
+    private TextField textcredits_Course;
+    @FXML
+    private TextField text_Cost;
 
     private void fillData() {
         name = txt_name.getText();
@@ -85,12 +97,26 @@ public class StudentController {
 
         clearTextFields();
     }
+    void add_CoursePress(ActionEvent event){
+        fillData();
+        Course to_Edit=courseList.getSelectionModel().getSelectedItem();
+        if(!courseName.isEmpty()){
+            to_Edit.setCourseName(courseName); //Set the course name,when not Empty
+        }
+        if(courseCredits>0){
+            to_Edit.setNumOfCredits(courseCredits);
+        }
+        to_Edit.setPrice(course_Cost);
+        courseList.getSelectionModel().clearSelection();
 
+        clearTextFields();
+    }
     @FXML
     void initialize() {
-        textFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address};
+        textFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address,textC_name,textcredits_Course,text_Cost};
 
         listView.setItems(adviseesList);
+        courseList.setItems(courses);
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Advisee>() {
             @Override
             public void changed(ObservableValue<? extends Advisee> observableValue, Advisee oldA, Advisee newA) {
@@ -99,6 +125,11 @@ public class StudentController {
                 txt_email.setText(newA.getEmail().toString());
                 txt_phoneNum.setText("" + newA.getPhoneNum());
                 txt_address.setText(newA.getAddress().toString());
+            }
+            public void modified_Course(ObservableValue<? extends Course> observableValue, Course oldC, Course newC){
+                textC_name.setText(newC.getCourseName());
+                textcredits_Course.setText(String.valueOf(newC.getNumOfCredits()));
+                text_Cost.setText(String.valueOf(newC.getPrice()));
             }
         });
     }
