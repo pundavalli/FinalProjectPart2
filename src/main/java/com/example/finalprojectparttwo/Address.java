@@ -57,8 +57,8 @@ public class Address {
 
     @Override
     public String toString() {
-        return String.format("%d %s\n" +
-                        "%s, %s\n" +
+        return String.format("%d %s \n" +
+                        "%s, %s \n" +
                         "%d",
                 house_number, street, town, state, zip_code);
     }

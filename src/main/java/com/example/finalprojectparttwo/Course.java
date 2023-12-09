@@ -19,10 +19,11 @@ public class Course {
 
     @Override
     public String toString() {
-        return String.format("%s\n" +
-                        "%d credits" +
-                        "$%.2f",
-                courseName, numOfCredits, numOfCredits * price);
+        return courseName;
+    }
+
+    public double calcCost() {
+        return numOfCredits * price;
     }
 
     public String getCourseName() {
@@ -48,4 +49,6 @@ public class Course {
     public void setPrice(double price) {
         this.price = price;
     }
+
+
 }

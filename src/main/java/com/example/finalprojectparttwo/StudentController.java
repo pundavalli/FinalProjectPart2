@@ -12,14 +12,11 @@ import javafx.scene.control.TextField;
 
 public class StudentController {
 
-    TextField[] textFields;
+    TextField[] studentTextFields, courseTextFields;
     private ObservableList<Advisee> adviseesList = FXCollections.observableArrayList();
-    private String name, acadID, email;
-    private long phoneNum;
-    private ObservableList<Course> courses = FXCollections.observableArrayList();
-    private String courseName;
-    private int courseCredits;
-    private double course_Cost;
+    private String name, acadID, email, phoneNum;
+    private ObservableList<Course> courseList = FXCollections.observableArrayList();
+    private ObservableList<Course> studentCourseList;
 
     @FXML
     private Button addBtn;
@@ -31,7 +28,13 @@ public class StudentController {
     private Button deleteBtn;
 
     @FXML
-    private ListView<Advisee> listView;
+    private Button addCourseBtn;
+
+    @FXML
+    private Button deleteCourseBtn;
+
+    @FXML
+    private ListView<Advisee> adviseeListView;
 
     @FXML
     private TextField txt_acadID;
@@ -49,26 +52,45 @@ public class StudentController {
     private TextField txt_phoneNum;
 
     @FXML
-    private ListView<Course> courseList;
+    private TextField txt_tuition;
 
     @FXML
-    private TextField text_courseName;
+    private ListView<Course> courseListView;
 
     @FXML
-    private TextField text_courseCredits;
+    private ListView<Course> studentCourseListView;
 
     @FXML
-    private TextField text_course_Cost;
+    private TextField txt_courseCost;
+
+    @FXML
+    private TextField txt_courseCredits;
+
+    @FXML
+    private TextField txt_courseName;
 
     private void fillData() {
         name = txt_name.getText();
         acadID = txt_acadID.getText();
         email = txt_email.getText();
-        phoneNum = Long.parseLong(txt_phoneNum.getText());
+        phoneNum = txt_phoneNum.getText();
     }
 
-    private void clearTextFields() {
-        for (TextField tf : textFields) {
+    private void fillCourseTextFields(Course selectedCourse) {
+        txt_courseName.setText(selectedCourse.getCourseName());
+        txt_courseCredits.setText("" + selectedCourse.getNumOfCredits());
+        txt_courseCost.setText("$" + selectedCourse.calcCost());
+    }
+
+    private void clearStudentInfo() {
+        for (TextField tf : studentTextFields) {
+            tf.clear();
+        }
+        studentCourseList.clear();
+    }
+
+    private void clearCourseInfo() {
+        for (TextField tf : courseTextFields) {
             tf.clear();
         }
     }
@@ -78,69 +100,115 @@ public class StudentController {
         fillData();
 
         Advisee addedAdvisee = new Advisee(name, acadID);
-        addedAdvisee.setEmail(email);
-        addedAdvisee.setPhoneNum(phoneNum);
+        if (!email.isEmpty()) {
+            addedAdvisee.setEmail(email);
+        }
+        if (!phoneNum.isEmpty()) {
+            addedAdvisee.setPhoneNum(Long.parseLong(phoneNum));
+        }
         addedAdvisee.setAddress(new Address(25, "Yearsley Mill Rd", "Media", "PA", 19063));
         adviseesList.add(addedAdvisee);
 
-        clearTextFields();
+        clearStudentInfo();
+        adviseeListView.getSelectionModel().clearSelection();
     }
 
     @FXML
     void editBtnPress(ActionEvent event) {
         fillData();
 
-        Advisee editedAdvisee = listView.getSelectionModel().getSelectedItem();
+        Advisee selectedAdvisee = adviseeListView.getSelectionModel().getSelectedItem();
 
         if (!name.isEmpty()) {
-            editedAdvisee.setName(name);
+            selectedAdvisee.setName(name);
+        }
+        if (!acadID.isEmpty()) {
+            selectedAdvisee.setID(acadID);
         }
         if (!email.isEmpty()) {
-            editedAdvisee.setEmail(email);
+            selectedAdvisee.setEmail(email);
         }
-        editedAdvisee.setPhoneNum(phoneNum);
-        listView.getSelectionModel().clearSelection();
+        if (!phoneNum.isEmpty()) {
+            selectedAdvisee.setPhoneNum(Long.parseLong(phoneNum));
+        }
 
-        clearTextFields();
+        clearStudentInfo();
+        adviseeListView.getSelectionModel().clearSelection();
     }
 
     @FXML
     void deleteBtnPress(ActionEvent event) {
-        adviseesList.remove(listView.getSelectionModel().getSelectedIndex());
-        clearTextFields();
+        adviseesList.remove(adviseeListView.getSelectionModel().getSelectedItem());
+        clearStudentInfo();
+        adviseeListView.getSelectionModel().clearSelection();
     }
 
+    @FXML
     void add_CoursePress(ActionEvent event) {
-        fillData();
-        Course to_Edit = new Course(courseName, courseCredits, course_Cost);
-        to_Edit.setCourseName(courseName);
-        to_Edit.setNumOfCredits(courseCredits);
-        to_Edit.setPrice(course_Cost);
-        courses.add(to_Edit);
+        Course selectedCourse = courseListView.getSelectionModel().getSelectedItem();
+        adviseeListView.getSelectionModel().getSelectedItem().getCourses().add(selectedCourse);
+        int index = adviseeListView.getSelectionModel().getSelectedIndex();
+        adviseeListView.getSelectionModel().clearSelection();
+        adviseeListView.getSelectionModel().select(index);
+    }
 
-        clearTextFields();
+    @FXML
+    void deleteCourseBtnPress(ActionEvent event) {
+        int selectedCourse = studentCourseListView.getSelectionModel().getSelectedIndex();
+        Advisee selectedAdvisee = adviseeListView.getSelectionModel().getSelectedItem();
+        selectedAdvisee.getCourses().remove(selectedCourse);
+        studentCourseListView.getSelectionModel().clearSelection();
+        studentCourseList = FXCollections.observableArrayList(selectedAdvisee.getCourses());
+        studentCourseListView.setItems(studentCourseList);
+        selectedAdvisee.Payment();
+        txt_tuition.setText("" + selectedAdvisee.getTuition());
+        clearCourseInfo();
     }
 
     @FXML
     void initialize() {
-        textFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address, text_courseName, text_courseCredits, text_course_Cost};
+        studentTextFields = new TextField[]{txt_name, txt_acadID, txt_email, txt_phoneNum, txt_address, txt_tuition};
+        courseTextFields = new TextField[]{txt_courseName, txt_courseCredits, txt_courseCost};
 
-        listView.setItems(adviseesList);
-        courseList.setItems(courses);
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Advisee>() {
+        txt_address.setText("25 Yearsley Mill Rd, Media, PA 19063");
+
+        adviseeListView.setItems(adviseesList);
+        adviseeListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Advisee>() {
             @Override
             public void changed(ObservableValue<? extends Advisee> observableValue, Advisee oldA, Advisee newA) {
                 txt_name.setText(newA.getName());
                 txt_acadID.setText(newA.getID());
-                txt_email.setText(newA.getEmail().toString());
-                txt_phoneNum.setText("" + newA.getPhoneNum());
+                if (newA.getPhoneNum() != 0) {
+                    txt_phoneNum.setText("" + newA.getPhoneNum());
+                }
                 txt_address.setText(newA.getAddress().toString());
+                newA.Payment();
+                txt_tuition.setText("" + newA.getTuition());
+                studentCourseList = FXCollections.observableArrayList(newA.getCourses());
+                studentCourseListView.setItems(studentCourseList);
+                txt_email.setText(newA.getEmail().toString());
             }
+        });
 
-            public void modified_Course(ObservableValue<? extends Course> observableValue, Course oldC, Course newC) {
-                text_courseName.setText(newC.getCourseName());
-                text_courseCredits.setText(String.valueOf(newC.getNumOfCredits()));
-                text_course_Cost.setText(String.valueOf(newC.getPrice()));
+        courseList.addAll(new Course("CMPSC221", 4, 100),
+                new Course("ECON102", 4, 100),
+                new Course("NUTR251", 3, 100)
+        );
+        courseListView.setItems(courseList);
+        courseListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Course>() {
+            @Override
+            public void changed(ObservableValue<? extends Course> observableValue, Course oldC, Course newC) {
+                fillCourseTextFields(newC);
+                studentCourseListView.getSelectionModel().clearSelection();
+            }
+        });
+
+        studentCourseListView.setItems(studentCourseList);
+        studentCourseListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Course>() {
+            @Override
+            public void changed(ObservableValue<? extends Course> observableValue, Course oldC, Course newC) {
+                fillCourseTextFields(newC);
+                courseListView.getSelectionModel().clearSelection();
             }
         });
     }
